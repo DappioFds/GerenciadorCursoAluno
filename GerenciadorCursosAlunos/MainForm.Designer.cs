@@ -47,6 +47,7 @@
             lblErroCpf = new Label();
             lblErroMatricula = new Label();
             txtCpf = new MaskedTextBox();
+            btnRemoverAluno = new Button();
             SuspendLayout();
             // 
             // lblNome
@@ -214,11 +215,22 @@
             txtCpf.Size = new Size(288, 23);
             txtCpf.TabIndex = 19;
             // 
+            // btnRemoverAluno
+            // 
+            btnRemoverAluno.Location = new Point(185, 445);
+            btnRemoverAluno.Name = "btnRemoverAluno";
+            btnRemoverAluno.Size = new Size(123, 56);
+            btnRemoverAluno.TabIndex = 20;
+            btnRemoverAluno.Text = "Remover Aluno";
+            btnRemoverAluno.UseVisualStyleBackColor = true;
+            btnRemoverAluno.Click += btnRemoverAluno_Click_1;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1244, 688);
+            Controls.Add(btnRemoverAluno);
             Controls.Add(txtCpf);
             Controls.Add(lblErroMatricula);
             Controls.Add(lblErroCpf);
@@ -268,5 +280,6 @@
         private Label lblErroCpf;
         private Label lblErroMatricula;
         private MaskedTextBox txtCpf;
+        private Button btnRemoverAluno;
     }
 }

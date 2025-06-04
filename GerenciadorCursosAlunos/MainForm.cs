@@ -325,5 +325,30 @@ namespace GerenciadorCursosAlunos
                 this.Height = novaAltura;
             }
         }
+
+        //remover aluno
+        private void btnRemoverAluno_Click_1(object sender, EventArgs e)
+        {
+            if (lstAlunos.SelectedItem is Aluno alunoSelecionado)
+            {
+                var confirmacao = MessageBox.Show(
+                    $"Tem certeza que deseja remover o aluno:\n\n{alunoSelecionado.Nome}?",
+                    "Confirmar Remoção",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Warning
+                );
+
+                if (confirmacao == DialogResult.Yes)
+                {
+                    alunos.Remove(alunoSelecionado);
+                    lstAlunos.Items.Remove(alunoSelecionado);
+                    MessageBox.Show("Aluno removido com sucesso!");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Selecione um aluno para remover.");
+            }
+        }
     }
 }
