@@ -113,19 +113,43 @@ namespace GerenciadorCursosAlunos
                 return;
             }
 
-            var aluno = new Aluno(nome, email, cpf, matricula);
-            foreach (Curso curso in clbCursos.CheckedItems)
+            // Verifica se já existe aluno com mesmo CPF ou matrícula
+            var alunoExistente = alunos.Find(a => a.Cpf == cpf || a.Matricula == matricula);
+
+            if (alunoExistente != null)
             {
-                aluno.Matricular(curso);
+                // Verifica se é o MESMO aluno (nome e email iguais)
+                if (alunoExistente.Nome == nome && alunoExistente.Email == email)
+                {
+                    // Apenas adiciona os novos cursos (evita duplicar cursos)
+                    foreach (Curso curso in clbCursos.CheckedItems)
+                    {
+                        alunoExistente.Matricular(curso);
+                    }
+
+                    MessageBox.Show("Aluno já existia. Cursos atualizados com sucesso!");
+                }
+                else
+                {
+                    MessageBox.Show("Já existe um aluno com o mesmo CPF ou matrícula, mas com dados diferentes (nome ou email). Verifique os dados.");
+                    return;
+                }
+            }
+            else
+            {
+                // Criar novo aluno
+                var novoAluno = new Aluno(nome, email, cpf, matricula);
+                foreach (Curso curso in clbCursos.CheckedItems)
+                {
+                    novoAluno.Matricular(curso);
+                }
+
+                alunos.Add(novoAluno);
+                lstAlunos.Items.Add(novoAluno);
+
+                MessageBox.Show("Aluno adicionado com sucesso!");
             }
 
-            alunos.Add(aluno);
-            if (!lstAlunos.Items.Contains(aluno))
-            {
-                lstAlunos.Items.Add(aluno);
-            }
-
-            MessageBox.Show("Aluno adicionado com sucesso!");
 
             txtNome.Clear();
             txtEmail.Clear();
