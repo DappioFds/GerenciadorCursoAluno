@@ -10,6 +10,8 @@ namespace GerenciadorCursosAlunos
         private List<Curso> cursos = new();
         private List<Categoria> categorias = new();
 
+        // Inicializa os componentes da interface e configura o campo CPF
+        // Também carrega os dados iniciais de categorias e cursos
         public MainForm()
         {
             InitializeComponent();
@@ -17,6 +19,7 @@ namespace GerenciadorCursosAlunos
             InicializarDados();
         }
 
+        // Cria categorias e cursos iniciais do sistema para exemplo e testes
         private void InicializarDados()
         {
             var catTI = new Categoria("TI");
@@ -32,6 +35,7 @@ namespace GerenciadorCursosAlunos
             AtualizarListaCursos();
         }
 
+        // Atualiza a lista de cursos exibida no formulário com base nos dados disponíveis
         private void AtualizarListaCursos()
         {
             clbCursos.Items.Clear();
@@ -39,6 +43,7 @@ namespace GerenciadorCursosAlunos
                 clbCursos.Items.Add(curso);
         }
 
+        // Preenche o ComboBox de categorias com as existentes e seleciona a opção "Todas"
         private void AtualizarComboCategorias()
         {
             cmbCategorias.Items.Clear();
@@ -48,6 +53,8 @@ namespace GerenciadorCursosAlunos
             cmbCategorias.SelectedIndex = 0;
         }
 
+        // Se a opção "Todas" for selecionada, exibe todos os cursos
+        // Caso contrário, filtra e exibe apenas cursos da categoria selecionada
         private void cmbCategorias_SelectedIndexChanged(object sender, EventArgs e)
         {
             clbCursos.Items.Clear();
@@ -66,6 +73,7 @@ namespace GerenciadorCursosAlunos
             }
         }
 
+        // Limpa erros anteriores e coleta os dados inseridos pelo usuário
         private void btnAdicionarAluno_Click(object sender, EventArgs e)
         {
             LimparErrosValidacao();
@@ -77,7 +85,7 @@ namespace GerenciadorCursosAlunos
 
             bool temErro = false;
 
-            // Nome
+            // Validação do Nome
             if (string.IsNullOrWhiteSpace(nome) || nome.Length < 3)
             {
                 txtNome.BackColor = Color.MistyRose;
@@ -85,7 +93,7 @@ namespace GerenciadorCursosAlunos
                 temErro = true;
             }
 
-            // Cpf
+            // Validação do Cpf (tem que conter 11 digitos)
             if (string.IsNullOrWhiteSpace(cpf) || cpf.Length != 11)
             {
                 txtCpf.BackColor = Color.MistyRose;
@@ -93,7 +101,7 @@ namespace GerenciadorCursosAlunos
                 temErro = true;
             }
 
-            // Matrícula
+            // Validação da Matrícula (tem que ter 9 digitos)
             if (string.IsNullOrWhiteSpace(matricula) || matricula.Length != 9 || !long.TryParse(matricula, out _))
             {
                 txtMatricula.BackColor = Color.MistyRose;
@@ -101,7 +109,7 @@ namespace GerenciadorCursosAlunos
                 temErro = true;
             }
 
-            // Cursos
+            // Validação dos Cursos selecionados
             if (clbCursos.CheckedItems.Count == 0)
             {
                 MessageBox.Show("O aluno deve estar em pelo menos um Curso.");
@@ -129,15 +137,18 @@ namespace GerenciadorCursosAlunos
 
                     MessageBox.Show("Aluno já existia. Cursos atualizados com sucesso!");
                 }
+
+                // Se existe outro aluno com mesmo CPF/matrícula mas com dados diferentes, mostra erro
                 else
                 {
                     MessageBox.Show("Já existe um aluno com o mesmo CPF ou matrícula, mas com dados diferentes (nome ou email). Verifique os dados.");
                     return;
                 }
             }
+            // Caso contrário, cria um novo aluno e o adiciona à lista
             else
             {
-                // Criar novo aluno
+                // Cria novo aluno
                 var novoAluno = new Aluno(nome, email, cpf, matricula);
                 foreach (Curso curso in clbCursos.CheckedItems)
                 {
@@ -150,6 +161,7 @@ namespace GerenciadorCursosAlunos
                 MessageBox.Show("Aluno adicionado com sucesso!");
             }
 
+            // Limpa os campos de entrada e desmarca todos os cursos após o cadastro
 
             txtNome.Clear();
             txtEmail.Clear();
@@ -164,6 +176,7 @@ namespace GerenciadorCursosAlunos
             LimparErrosValidacao();
         }
 
+        // Exibe as informações detalhadas do aluno selecionado
         private void btnExibirAluno_Click(object sender, EventArgs e)
         {
             if (lstAlunos.SelectedItem is Aluno aluno)
@@ -197,10 +210,12 @@ namespace GerenciadorCursosAlunos
             lblErroMatricula.Text = "";
         }
 
+        // Solicita ao usuário o nome de uma nova categoria
         private void btnCriarCursoCategoria_Click(object sender, EventArgs e)
         {
             string nomeCategoria = Microsoft.VisualBasic.Interaction.InputBox("Nome da nova categoria:", "Nova Categoria", "TI");
             if (string.IsNullOrWhiteSpace(nomeCategoria)) return;
+
 
             Categoria categoria = categorias.Find(c => c.Nome.Equals(nomeCategoria, StringComparison.OrdinalIgnoreCase));
             if (categoria == null)
@@ -217,6 +232,8 @@ namespace GerenciadorCursosAlunos
             AtualizarListaCursos();
             MessageBox.Show("Curso criado com sucesso!");
         }
+
+        // Ajusta o cursor para facilitar a digitação no formato do CPF
         private void txtCpf_Click(object sender, EventArgs e)
         {
             AjustarCursorCpf();
@@ -285,7 +302,9 @@ namespace GerenciadorCursosAlunos
             aluno.ExibirInformacoes();
         }
 
-        private readonly float proporcaoOriginal = 16f / 9f; 
+        private readonly float proporcaoOriginal = 16f / 9f;
+
+        // Mantém a proporção 16:9 da janela ao ser redimensionada, evitando distorções
         private void MainForm_Resize(object sender, EventArgs e)
         {
             int novaLargura = this.Width;
